@@ -418,3 +418,113 @@ automate.set_sorties([etat3])
 # Implementation de l’algorithme de minimisation d’un automate fini
 def question2_5_4(automate):
     print("TO DO")
+
+
+
+def question3_1_1(mot):
+
+    cpta = 0
+    cptb = 0
+
+    for c in mot:
+        if c == 'a':
+            cpta += 1
+        if c == 'b':
+            cptb += 1
+
+    if cpta > cptb:
+        return True
+
+    return False
+
+#print(motAvecPusDeA("abababa"))
+
+
+# renvoie tous les mots de longueur 30 et période 3 sur un alphabet
+def question3_1_2(alphabet):
+
+    ensMotPeriodique=[]
+
+    for l1 in alphabet:
+        for l2 in alphabet:
+            for l3 in alphabet:
+                periode = ""
+                periode += l1
+                periode += l2
+                periode += l3
+                ensMotPeriodique.append(periode*10)
+
+    return ensMotPeriodique
+
+# print(question3_1_2(["a","b"]))
+
+#  pour un mot v, retourner le plus grand mot u tel que u est un préfixe de v et le miroir de
+# u (noté u) est un suffixe de v
+def question3_1_3(mot):
+    pref=""
+    n=len(mot)
+    for i in range((n//2)+1):
+        if mot[i] == mot[n-i-1]:
+            pref = pref + mot[i]
+        else:
+            return pref
+    return pref
+
+#print(question3_1_3("caaac"))
+
+# pour deux mots u et v de même longueur, retourner le mot contenant les caractères de u
+# dans l’ordre aux positions impaires et ceux de v aux positions paires
+def question3_1_4(u,v):
+    if len(u) != len(v):
+        return False
+
+    mot=""
+    for i in range(len(v)):
+        if i%2 == 0:
+            mot += v[i]
+        if i%2 != 0:
+            mot += u[i]
+
+    return mot
+
+#  print(question3_1_4("emma", "marc"))
+
+# pour un mot u, retourner la liste ordonnée lexicographiquement des caractères sans doublon
+
+def question3_1_5(u):
+    return sorted(set(u))
+
+# print(question3_1_5("aaaaaccbjkkd"))
+
+#  pour un mot u sur l’alphabet {a, b}, retourner le motif de longueur 3 le plus présent dans
+# u. Par exemple, aba est présent 3 fois dans abababbaaba.
+
+def question3_1_6(u):
+    maxnb = 0
+    result = ""
+    def nb(mot, motif):
+        cpt = 0
+        while len(mot) >= 3:
+            if mot[:3] == motif:
+                cpt += 1
+            mot = mot[1:]
+        return cpt
+
+    alphabet=list(set(u))
+    for l1 in alphabet:
+        for l2 in alphabet:
+            for l3 in alphabet:
+                periode = ""
+                periode += l1
+                periode += l2
+                periode += l3
+                tempnb = nb(u,periode)
+                if tempnb >= maxnb:
+                    maxnb=tempnb
+                    result=periode
+
+    return result
+
+print(question3_1_6("abababbaaba"))
+
+#========================= En dimension 2 ==============================
