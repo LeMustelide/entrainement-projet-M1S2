@@ -335,6 +335,17 @@ class Etat:
 
         return state in visited
 
+    def get_transition_by_letter(self,letter):
+        for transition in self.transitions:
+            if transition[1] == letter:
+                return transition
+
+    def get_alphabet(self):
+        alpha = []
+        for transition in self.transitions:
+            if transition[1] not in alpha:
+                alpha.append(transition[1])
+        return alpha
 
 class Automate:
     etats = []
@@ -418,10 +429,61 @@ automate.set_sorties([etat3])
 
 # Implementation de l’algorithme de minimisation d’un automate fini
 def question2_5_4(automate):
-    print("TO DO")
+    ensembles = []
+    ensembles.append(list(set(automate.etats) - set(automate.sorties)))
+    ensembles.append(automate.sorties)
 
 
+    def ensemble_update(ensembles):
+        map = [] # [(1, "a", 5, 1)]
+        for ensemble in ensembles:
+            for i in range(len(ensemble)):
+                for transition in ensemble[i].transitions:
+                    map.append((ensemble[i].name,transition[1],transition[0].name,get_id_ensemble_by_etat(transition[0], ensembles)))
+        return map
 
+    def get_id_ensemble_by_etat(etat, ensembles):
+        for ensemble in ensembles:
+            if etat in ensemble:
+                return ensembles.index(ensemble)
+
+
+                #if ensemble[i].get_transition_by_letter()
+    return ensemble_update(ensembles)
+    # return [[y.name for y in x] for x in ensembles]
+
+
+automate = Automate()
+etat1 = Etat()
+etat1.set_name("1")
+
+etat2 = Etat()
+etat2.set_name("2")
+
+etat3 = Etat()
+etat3.set_name("3")
+
+etat4 = Etat()
+etat4.set_name("4")
+
+etat5 = Etat()
+etat5.set_name("5")
+
+etat6 = Etat()
+etat6.set_name("6")
+
+etat1.set_transitions([(etat2,"b"),(etat5,"a")])
+etat2.set_transitions([(etat1,"b")])
+etat3.set_transitions([(etat4,"a"),(etat2,"b")])
+etat4.set_transitions([(etat5,"b"),(etat6,"b")])
+etat5.set_transitions([(etat5,"a"),(etat6,"b")])
+etat6.set_transitions([(etat3,"b"),(etat4,"a")])
+
+automate.set_etats([etat1, etat2, etat3, etat4,etat5,etat6])
+automate.set_entrees([etat1])
+automate.set_sorties([etat4,etat5,etat6])
+
+print(question2_5_4(automate))
 def question3_1_1(mot):
 
     cpta = 0
@@ -704,4 +766,4 @@ def question3_3_4(u):
 
     return currentRes
 
-print(question3_3_4("efrhabdj"))
+# print(question3_3_4("efrhabdj"))
