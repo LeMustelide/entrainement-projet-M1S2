@@ -525,6 +525,7 @@ def question3_1_6(u):
 
     return result
 
-print(question3_1_6("abababbaaba"))
+# print(question3_1_6("abababbaaba"))
 
 #========================= En dimension 2 ==============================
+
