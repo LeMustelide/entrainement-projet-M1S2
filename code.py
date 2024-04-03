@@ -1,4 +1,5 @@
 import random
+import string
 
 
 ## 2.1
@@ -463,18 +464,18 @@ def question3_1_2(alphabet):
 def question3_1_3(mot):
     pref=""
     n=len(mot)
-    for i in range((n//2)+1):
+    for i in range((n//2) if n%2 == 0 else (n//2)+1):
         if mot[i] == mot[n-i-1]:
             pref = pref + mot[i]
         else:
             return pref
     return pref
 
-#print(question3_1_3("caaac"))
+# print(question3_1_3("caaaac"))
 
 # pour deux mots u et v de même longueur, retourner le mot contenant les caractères de u
 # dans l’ordre aux positions impaires et ceux de v aux positions paires
-def question3_1_4(u,v):
+def taktaktakquestion3_1_4(u,v):
     if len(u) != len(v):
         return False
 
@@ -528,4 +529,179 @@ def question3_1_6(u):
 # print(question3_1_6("abababbaaba"))
 
 #========================= En dimension 2 ==============================
+m=[['a','a','b'],
+   ['a','b','b']]
 
+## pour une matrice M et un entier k, retourner le nombre de colonnes de M contenant au
+# moins k fois le caractère ’a’
+def question3_2_2(mat, k):
+    counterCol = 0
+    for col in range(len(mat[0])):
+        countera = 0
+        for ligne in range(len(mat)):
+            if mat[ligne][col] == "a":
+                countera += 1
+        if countera >= k:
+            counterCol += 1
+
+    return counterCol
+
+# print(question3_2_2(m,2))
+
+# pour une matrice de mots, vérifier que pour chaque i > 0 et j > 0, le mot en position
+# (i; j) a pour préfixe le mot en position (i - 1; j - 1)
+
+def question3_2_3(m):
+    for i in range(1, len(m)):
+        for j in range(1, len(m[0])):
+            pref = m[i - 1][j - 1]
+            mot = m[i][j]
+            n = len(pref)
+            if pref != mot[:n]:
+                return False
+    return True
+
+
+m=[['ta','to','toc'],
+   ['tic','tac','toc']]
+
+# print(question3_2_3(m))
+
+# pour une matrice d’entiers, retourner i tel que la somme des éléments de la ligne i soit la
+# plus grande parmi toutes les lignes
+def question3_2_4(m):
+    maxS = 0
+    ligneR = 0
+    for ligne in m:
+        if maxS <= sum(ligne):
+            maxS=sum(ligne)
+            ligneR = ligne
+
+    return m.index(ligneR)
+
+m=[[1,2,13],
+   [4,5,6]]
+
+#print(question3_2_4(m))
+
+
+
+def question3_2_5(n):
+    res = [[0 for _ in range(n)] for _ in range(n)]
+    res[0] = [1 for _ in range(n)]
+
+    for i in range(1, n):
+        for j in range(1, n):
+            res[i][j] = res[i-1][j-1]+res[i][j-1]
+
+    return res
+#print(question3_2_5(5))
+
+# pour une matrice M de mots, retourner la matrice de même taille contenant en position
+# (i; j) la taille du mot en position (i; j) de M
+def question3_2_5(m):
+  return [[len(mot) for mot in line] for line in m]
+    # m2 = []
+    # lignes = [ligne for ligne in m]
+    # for i in range(len(m)):
+    #     taillemotligne = [len(mot) for mot in lignes[i]]
+    #     m2.append(taillemotligne)
+    # return m2
+
+m=[['ta','to','toc'],
+   ['tic','tac','toc']]
+
+# print(question3_2_5(m))
+
+# calculer le n-ième terme de la suite de Fibonacci donnée par u0 = 0, u1 = 1 et uk+2 =
+# uk+1 + uk
+def question3_3_1(n):
+    if n == 0:
+        return 0
+    if n == 1:
+        return 1
+    return question3_3_1(n-2)+question3_3_1(n-1)
+
+# print(question3_3_1(10))
+
+# on note f la fonction qui à un entier pair k associe k=2 et à un entier impair k associe
+# 3  k + 1. On appelle suite de Syracuse de k la suite k; f(k); f(f(k)); f(f(f(k))); : : : . On
+# arrête la suite lorsqu’un des termes vaut 1.
+
+def question3_3_2_1(k):
+    tab = []
+
+    def syra(k, tab):
+        tab.append(k)
+        if k == 1 or k == 0:
+            return
+        if k%2 == 0:
+            syra(k//2, tab)
+        else:
+            syra(3*k+1, tab)
+
+    syra(k, tab)
+    return tab
+
+# print(question3_3_2_1(10))
+
+# Pour un entier n, calculer le plus petit entier k tel que la suite de Syracuse de k est
+# de longueur au moins n.
+
+def question3_3_2_2(n):
+    res = 0
+    i = 0
+    while res < n:
+        res = len(question3_3_2_1(i))
+        i += 1
+    return i-1
+
+# print(question3_3_2_2(10))
+
+# Montrer que pour tout k  50, la suite de Syracuse de k est finie (on tombe sur 1
+# après un nombre fini d’étapes). Remarque : Savoir si toute suite de Syracuse est finie
+# est une célèbre question ouverte.
+def question3_3_2_3(k):
+    for i in range(1,k):
+        res = question3_3_2_1(i)
+        if res[len(res)-1] != 1:
+            print(res)
+            return False
+    return True
+
+# print(question3_3_2_3(50))
+
+# pour un mot u sur l’alphabet fa; b; c; : : : ; zg, remplacer en partant de la première lettre
+# toute occurrence de deux lettres consécutives de l’alphabet par deux fois la lettre suivante.
+# Exemple : ’efrhabdj’ devient ’ggrhccdj’.
+
+def question3_3_3(mot):
+    motList = list(mot)
+    motListinit = list(mot)
+    alphabet = list(string.ascii_lowercase)
+
+    for i in range(len(motList)-1):
+        indexLetter = alphabet.index(motListinit[i])
+        indexNextLetter = alphabet.index(motListinit[i+1])
+        if indexLetter+1 == indexNextLetter:
+            motList[i] = alphabet[indexNextLetter+1]
+            motList[i+1] = alphabet[indexNextLetter+1]
+
+    return motList
+
+# print(question3_3_3("efrhabdj"))
+
+# pour un mot u appliquer la transformation précédente sur u puis sur l’image de u, etc. . .,
+# jusqu’à obtenir un mot égal à son image. Exemple : ’efrhabdj’ devient ’ggrhccdj’ qui
+# devient ’ggrhceej’.
+
+def question3_3_4(u):
+    currentRes = question3_3_3(u)
+    previusRes = ""
+    while currentRes != previusRes:
+        previusRes = currentRes
+        currentRes = question3_3_3(previusRes)
+
+    return currentRes
+
+print(question3_3_4("efrhabdj"))
